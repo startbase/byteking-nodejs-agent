@@ -4,9 +4,8 @@ const dgram = require('dgram');
 const server = dgram.createSocket('udp4');
 const WebSocketClient = require(path.join(__dirname, './ws-client'));
 
-const CONFIG_FILE = 'config.json';
-
-function App() {
+module.exports = function ByteKingAgent() {
+    this.config_dir = path.join(__dirname, 'config.json');
     this.data_queue = [];
     this.socket = null;
 
@@ -34,9 +33,10 @@ function App() {
         this.socket = new WebSocketClient(url, params['reconnect_time_interval']);
     };
 
-    this.init = function() {
+    this.init = function(config_dir) {
         "use strict";
-        const raw_config = fs.readFileSync(path.join(__dirname, CONFIG_FILE), 'utf8');
+        config_dir = config_dir || this.config_dir;
+        const raw_config = fs.readFileSync(config_dir, 'utf8');
         const config = JSON.parse(raw_config);
 
         this.initUpdServer(config['udp_server']);
@@ -53,6 +53,4 @@ function App() {
             this.socket.send(JSON.stringify(stack_data));
         }, config['data_transfer_interval']);
     }
-}
-
-(new App()).init();
+};
