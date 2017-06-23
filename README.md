@@ -31,7 +31,7 @@ Official clients:
 
 Contribution
 ----
-Thank you for interesting in Byteking. If you want intend to make Byteking better you are fantastic.
+Thank you for interesting in Byteking. If you intend to make Byteking better you are fantastic.
 There are some ways to help to improve this product:
 - Just use it and submit issues if you find ones
 - Submit pull request
