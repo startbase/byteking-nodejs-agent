@@ -1,10 +1,14 @@
 {
   "data_transfer_interval": 2000,
+  "data_transfer_length": 1000,
   "udp_server": {
     "port": 41452
   },
+  "socket_server": {
+    "port": 3111
+  },
   "web_socket_client": {
-    "remote_address": "192.168.77.16",
+    "remote_address": "127.0.0.1",
     "remote_port": 8081,
     "use_ssl": false,
     "reconnect_time_interval": 2000
