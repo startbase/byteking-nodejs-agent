@@ -2,8 +2,8 @@ const path = require('path');
 const fs = require('fs');
 const dgram = require('dgram');
 const WebSocketClient = require(path.join(__dirname, './ws-client'));
-var app = require('http').createServer();
-var io = require('socket.io')(app);
+const app = require('http').createServer();
+const io = require('socket.io')(app);
 
 'use strict';
 
