@@ -18,12 +18,13 @@ npm install byteking-agent
 
 Include installed package to your script and initialise with configuration file to run agent. Please see configuration example in `/example/custom_example.json`
 ```js
-const path = require('path');
 const ByteKingAgent = require('byteking-agent');
-
-const bk = new ByteKingAgent();
-bk.init(path.join(__dirname, './config.json'));
+ByteKingAgent.run();
 ```
+
+then
+>> node bk.js --transmitter:url http://localhost:8081 --transmitter:data_send_force 10
+
 
 Byteking agent get metric data from the web client(s).
 Official clients:

@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "express": "^4.15.3",
+    "nconf": "^0.8.4",
     "socket.io": "^2.0.3",
     "ws": "^3.0.0"
   }
