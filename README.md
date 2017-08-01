@@ -22,8 +22,14 @@ const ByteKingAgent = require('byteking-agent');
 ByteKingAgent.run();
 ```
 
-then
->> node bk.js --transmitter:url http://localhost:8081 --transmitter:data_send_force 10
+Then
+>> node bk.js \
+--debug true \
+--udp_server:port 40000 \
+--udp_server:address 127.0.0.1
+--transmitter:url http://127.0.0.1:8090 \
+--transmitter:data_send_force 1000 \
+--transmitter:data_send_interval 10000 \
 
 
 Byteking agent get metric data from the web client(s).
