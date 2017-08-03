@@ -44,7 +44,6 @@ class ByteKingAgent {
 
         this.log('byteking-agent process pid: ', process.pid);
 
-
     };
 
     log(...args) {
@@ -151,13 +150,13 @@ class ByteKingAgent {
 
         try {
             this._transmitter.send(JSON.stringify(this._data_queue));
+            this._data_queue = [];
+            this.log(this._data_queue.length);
         } catch (e) {
             this.initTransmitter();
             return;
         }
 
-        this._data_queue = [];
-        this.log(this._data_queue.length);
     };
 }
 
