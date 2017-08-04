@@ -68,7 +68,7 @@ class ByteKingAgent {
         });
 
         server.on('message', (message) => {
-            this.addMessage(message);
+            this.addMessage(message.toString());
         });
 
         server.on('listening', () => {
@@ -148,11 +148,15 @@ class ByteKingAgent {
             return;
         }
 
+        var data = this._data_queue;
+        this._data_queue = [];
+
         try {
-            this._transmitter.send(JSON.stringify(this._data_queue));
-            this._data_queue = [];
-            this.log(this._data_queue.length);
+            this._transmitter.send(JSON.stringify(data));
+            this.log(data.length);
         } catch (e) {
+            this.log("Error send", e.code, e.message);
+            this._data_queue.push(...data);
             this.initTransmitter();
             return;
         }
