@@ -45,6 +45,4 @@ There are some ways to help to improve this product:
 
 TODO
 ----
-- Do something with configurations. It only possible to get configurations from the file now.
-- Think something about improving network balancer
 - Test coverage

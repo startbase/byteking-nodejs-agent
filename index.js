@@ -1,13 +1,8 @@
-'use strict';
-
-/**
- * Module exports.
- * @public
- */
-
 const nconf = require('nconf');
 const dgram = require('dgram');
 const WebSocket = require('ws');
+
+'use strict';
 
 class ByteKingAgent {
     /**
