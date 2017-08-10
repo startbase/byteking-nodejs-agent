@@ -50,9 +50,9 @@ class ByteKingAgent {
 
     };
 
-    log(...args) {
+    log() {
         if (this.debug) {
-            console.log(args);
+            console.log(arguments);
         }
     };
 
