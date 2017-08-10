@@ -1,6 +1,6 @@
 {
   "name": "byteking-agent",
-  "version": "0.2.0",
+  "version": "0.2.3",
   "description": "Nodejs agent for ByteKing",
   "license": "MIT",
   "repository": {
@@ -8,6 +8,7 @@
     "url": "https://github.com/startbase/byteking-nodejs-agent.git"
   },
   "dependencies": {
+    "md5": "^2.2.1",
     "nconf": "^0.8.4",
     "ws": "^3.0.0"
   }

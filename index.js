@@ -1,6 +1,7 @@
 const nconf = require('nconf');
 const dgram = require('dgram');
 const WebSocket = require('ws');
+const md5 = require('md5');
 
 'use strict';
 
@@ -36,14 +37,17 @@ class ByteKingAgent {
         this._transmitter = null;
         this._init_transmitter = false;
         this.debug = nconf.get('debug');
+        this.multi_msgs = new Map();
+
+        this.part_block_size = 3;
 
         this.log('byteking-agent process pid: ', process.pid);
 
     };
 
-    log(...args) {
+    log() {
         if (this.debug) {
-            console.log(args);
+            console.log(arguments);
         }
     };
 
@@ -63,7 +67,7 @@ class ByteKingAgent {
         });
 
         server.on('message', (message) => {
-            this.addMessage(message);
+            this.addMessage(message.toString());
         });
 
         server.on('listening', () => {
@@ -108,13 +112,77 @@ class ByteKingAgent {
     };
 
     addMessage(message) {
-        this._data_queue.push(message.toString());
+        //console.log(message);
+
+        if (message.indexOf("_") === 0) {
+            this.multiMessage(message);
+            return;
+        }
+
+        this._data_queue.push(message);
         this.log(this._data_queue.length, this._data_send_force);
         if (this._data_queue.length >= this._data_send_force) {
             clearInterval(this._interval);
             this._send();
             this.initInterval();
         }
+    };
+
+    multiMessage(message) {
+        var result_size = 0;
+        var cur_item = 0;
+        var hash = '';
+        var msg_hash = '';
+        var msg = '';
+
+        if (message.indexOf("_p_") === 0) {
+            var slice = 3;
+            result_size = message.substring(slice, slice+this.part_block_size);
+            slice += this.part_block_size + 1;
+            cur_item = message.substring(slice, slice+this.part_block_size);
+            slice += this.part_block_size + 1;
+            hash = message.substring(slice, slice+32);
+            slice += 32+1;
+            msg_hash = message.substring(slice, slice+32);
+            slice += 32+1;
+            msg = message.substring(slice);
+        }
+
+        if (!this.multi_msgs.has(hash)) {
+            this.multi_msgs.set(hash, new Map());
+        }
+
+        var part = this.multi_msgs.get(hash);
+        part.set(parseInt(cur_item), msg);
+
+        if (part.size == parseInt(result_size)) {
+            if (this.multiMessageCompare(part, msg_hash)) {
+                this.multi_msgs.delete(hash);
+                return;
+            } else {
+                setTimeout(function () {
+                    this.multiMessageCompare(part, msg_hash);
+                    this.multi_msgs.delete(hash);
+                }, 1000);
+            }
+        }
+    };
+
+    multiMessageCompare(part, msg_hash) {
+        var result = '';
+        var parts = [...part.entries()].sort();
+        for (var i in parts) {
+            if (parts.hasOwnProperty(i)) {
+                result += parts[i][1];
+            }
+        }
+
+        if (md5(result) == msg_hash) {
+            this.log('multi success send', msg_hash);
+            this.addMessage(result);
+            return true;
+        }
+        return false;
     };
 
     run() {
@@ -143,11 +211,15 @@ class ByteKingAgent {
             return;
         }
 
+        var data = this._data_queue;
+        this._data_queue = [];
+
         try {
-            this._transmitter.send(JSON.stringify(this._data_queue));
-            this._data_queue = [];
-            this.log(this._data_queue.length);
+            this._transmitter.send(JSON.stringify(data));
+            this.log(data.length);
         } catch (e) {
+            this.log("Error send", e.code, e.message);
+            this._data_queue.push(...data);
             this.initTransmitter();
             return;
         }
