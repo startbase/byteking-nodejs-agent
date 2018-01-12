@@ -1,9 +1,9 @@
+'use strict';
+
 const dgram = require('dgram');
 const WebSocket = require('ws');
 const md5 = require('md5');
 const merge = require('deepmerge');
-
-'use strict';
 
 class ByteKingAgent {
     /**
