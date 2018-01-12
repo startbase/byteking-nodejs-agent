@@ -8,8 +8,8 @@
     "url": "https://github.com/startbase/byteking-nodejs-agent.git"
   },
   "dependencies": {
+    "deepmerge": "^2.0.1",
     "md5": "^2.2.1",
-    "nconf": "^0.8.4",
     "ws": "^3.0.0"
   }
 }

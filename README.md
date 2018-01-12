@@ -19,7 +19,15 @@ npm install byteking-agent
 Include installed package to your script and initialise with configuration file to run agent. Please see configuration example in `/example/custom_example.json`
 ```js
 const ByteKingAgent = require('byteking-agent');
-ByteKingAgent.run();
+ByteKingAgent.run({
+                      udp_server: {
+                          port: 40001
+                      },
+                      transmitter: {
+                          url:'http://127.0.0.1:8080'
+                      },
+                      debug: false
+                  });
 ```
 
 Then
